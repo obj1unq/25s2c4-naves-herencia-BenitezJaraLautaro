@@ -53,6 +53,7 @@ describe "Nave de pasajeros" {
 	test "recibir amenaza" {
 		naveSinPasajeros.recibirAmenaza()
 		assert.that(naveSinPasajeros.alarma())
+		assert.that(naveSinPasajeros.estaEnPeligro())
 	}
 
 }
@@ -62,7 +63,13 @@ describe "Nave de combate" {
 	const naveEnReposo = new NaveDeCombate()
 	const naveEnAtaque = new NaveDeCombate(modo = ataque)
 
+	test "esta invisible en reposo" {
+		assert.that(naveEnReposo.estaInvisible())
+	  
+	}
+
 	test "no esta invisible en reposo" {
+		naveEnReposo.velocidad(30000)
 		assert.notThat(naveEnReposo.estaInvisible())
 	}
 
@@ -71,7 +78,7 @@ describe "Nave de combate" {
 	}
 
 	test "no esta invisible en ataque" {
-		naveEnAtaque.velocidad(20000)
+		naveEnAtaque.desplegarArmas()
 		assert.notThat(naveEnAtaque.estaInvisible())
 	}
 
@@ -83,5 +90,6 @@ describe "Nave de combate" {
 	test "recibir amenaza en ataque" {
 		naveEnAtaque.recibirAmenaza()
 		assert.equals("Enemigo encontrado", naveEnAtaque.ultimoMensaje())
+		assert.that(naveEnAtaque.tieneArmasDesplegadas())
 	}
 }

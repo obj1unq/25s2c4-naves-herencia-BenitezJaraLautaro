@@ -19,9 +19,9 @@ class NaveDePasajeros {
 	var property alarma = false
 	const cantidadDePasajeros = 0
 
-	method tripulacion() = cantidadDePasajeros + 4
+	method cantiPersonasABordo() = cantidadDePasajeros + 4
 
-	method velocidadMaximaLegal() = 300000 / self.tripulacion() - if (cantidadDePasajeros > 100) 200 else 0
+	method velocidadMaximaLegal() = 300000 / self.cantiPersonasABordo() - if (cantidadDePasajeros > 100) 200 else 0
 
 	method estaEnPeligro() = velocidad > self.velocidadMaximaLegal() or alarma
 
@@ -35,6 +35,7 @@ class NaveDeCombate {
 	var property velocidad = 0
 	var property modo = reposo
 	const property mensajesEmitidos = []
+	var armasDesplegadas = false
 
 	method emitirMensaje(mensaje) {
 		mensajesEmitidos.add(mensaje)
@@ -42,10 +43,20 @@ class NaveDeCombate {
 	
 	method ultimoMensaje() = mensajesEmitidos.last()
 
-	method estaInvisible() = velocidad < 10000 and modo.invisible()
+	method estaInvisible() = modo.estaInvisible(self)
 
 	method recibirAmenaza() {
 		modo.recibirAmenaza(self)
+	}
+
+	method tieneArmasDesplegadas() {
+		return armasDesplegadas 
+	  
+	}
+
+	method desplegarArmas() {
+		armasDesplegadas = true
+	  
 	}
 
 }
@@ -53,6 +64,11 @@ class NaveDeCombate {
 object reposo {
 
 	method invisible() = false
+
+	method estaInvisible(nave) {
+		return nave.velocidad() < 10000
+	  
+	}
 
 	method recibirAmenaza(nave) {
 		nave.emitirMensaje("¡RETIRADA!")
@@ -64,8 +80,14 @@ object ataque {
 
 	method invisible() = true
 
+	method estaInvisible(nave) {
+		return not nave.tieneArmasDesplegadas()
+	  
+	}
+
 	method recibirAmenaza(nave) {
 		nave.emitirMensaje("Enemigo encontrado")
+		nave.desplegarArmas()
 	}
 
 }
