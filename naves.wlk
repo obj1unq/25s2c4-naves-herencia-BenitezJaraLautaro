@@ -1,3 +1,8 @@
+class nave {
+	var property velocidad = 0
+	var property name = 
+}
+
 class NaveDeCarga {
 
 	var velocidad = 0
