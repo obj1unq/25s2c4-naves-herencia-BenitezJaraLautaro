@@ -124,3 +124,4 @@ describe "nave residuos radiactivos" {
 	assert.equals(0, naveResiduosNoSellado.carga())
   }
 }
+
