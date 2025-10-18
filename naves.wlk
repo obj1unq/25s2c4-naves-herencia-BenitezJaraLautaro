@@ -1,11 +1,22 @@
-class nave {
-	var property velocidad = 0
-	var property name = 
+class Nave {
+	var  velocidad = 0
+	
+	method propulsar() {
+		velocidad = (velocidad+20000).min(300000)
+	}
+
+	method velocidad() {
+	  return velocidad
+	}
+
+	method prepararseParaViajar() {
+		velocidad = (velocidad + 15000).min(300000)
+	  
+	}
 }
 
-class NaveDeCarga {
+class NaveDeCarga inherits Nave {
 
-	var velocidad = 0
 	var property carga = 0
 
 	method sobrecargada() = carga > 100000
@@ -18,9 +29,8 @@ class NaveDeCarga {
 
 }
 
-class NaveDePasajeros {
+class NaveDePasajeros inherits Nave{
 
-	var velocidad = 0
 	var property alarma = false
 	const cantidadDePasajeros = 0
 
@@ -36,11 +46,11 @@ class NaveDePasajeros {
 
 }
 
-class NaveDeCombate {
-	var property velocidad = 0
+class NaveDeCombate inherits Nave{
 	var property modo = reposo
 	const property mensajesEmitidos = []
 	var armasDesplegadas = false
+
 
 	method emitirMensaje(mensaje) {
 		mensajesEmitidos.add(mensaje)
@@ -64,6 +74,12 @@ class NaveDeCombate {
 	  
 	}
 
+	override method prepararseParaViajar() {
+		super()
+		modo.preparaParaViajar(self)
+	  
+	}
+
 }
 
 object reposo {
@@ -77,6 +93,12 @@ object reposo {
 
 	method recibirAmenaza(nave) {
 		nave.emitirMensaje("¡RETIRADA!")
+	}
+
+	method preparaParaViajar(nave) {
+		nave.emitirMensaje("Saliendo en misión")
+		nave.modo(ataque)
+	  
 	}
 
 }
@@ -95,4 +117,30 @@ object ataque {
 		nave.desplegarArmas()
 	}
 
+	method preparaParaViajar(nave) {
+		nave.emitirMensaje("Volviendo a la base")
+	  
+	}
+
 }
+
+class NaveCargaResiduosRadiactivos inherits NaveDeCarga {
+	var selladoAlVacio = false
+
+	override method  recibirAmenaza() {
+		if (selladoAlVacio) {
+			velocidad = 0
+		} else {
+			super()
+		}
+	  
+	}
+
+	override method prepararseParaViajar() {
+		super()
+		selladoAlVacio = true
+	}
+
+}
+
+

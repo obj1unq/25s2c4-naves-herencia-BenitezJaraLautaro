@@ -69,8 +69,8 @@ describe "Nave de combate" {
 	}
 
 	test "no esta invisible en reposo" {
-		naveEnReposo.velocidad(30000)
-		assert.notThat(naveEnReposo.estaInvisible())
+		const naveEnReposoVelocidad_3000 = new NaveDeCombate(velocidad = 30000)
+		assert.notThat(naveEnReposoVelocidad_3000.estaInvisible())
 	}
 
 	test "esta invisible en ataque" {
@@ -92,4 +92,35 @@ describe "Nave de combate" {
 		assert.equals("Enemigo encontrado", naveEnAtaque.ultimoMensaje())
 		assert.that(naveEnAtaque.tieneArmasDesplegadas())
 	}
+}
+
+describe "propulsion naves" {
+  test "nave de carga tiene 20000 de velocidad" {
+	const naveSinVelocidad = new NaveDeCarga()
+	naveSinVelocidad.propulsar()
+	assert.equals(20000, naveSinVelocidad.velocidad())
+  }
+
+  test "nave pasajeros queda en 300000 de velocidad" {
+	const naveSinPasajeros = new NaveDePasajeros(velocidad = 290000)
+	naveSinPasajeros.propulsar()
+	assert.equals(300000, naveSinPasajeros.velocidad())
+
+  }
+}
+
+describe "nave residuos radiactivos" {
+	const naveResiduosSellado = new NaveCargaResiduosRadiactivos(velocidad=20000, carga = 3000, selladoAlVacio = true)
+	const naveResiduosNoSellado = new NaveCargaResiduosRadiactivos(velocidad=20000, carga = 3000)
+  test "recive amenaza sellado" {
+	naveResiduosSellado.recibirAmenaza()
+	assert.equals(0, naveResiduosSellado.velocidad())
+	assert.equals(3000, naveResiduosSellado.carga())
+  }
+
+  test "recive amenaza no sellad" {
+	naveResiduosNoSellado.recibirAmenaza()
+	assert.equals(20000, naveResiduosNoSellado.velocidad())
+	assert.equals(0, naveResiduosNoSellado.carga())
+  }
 }
